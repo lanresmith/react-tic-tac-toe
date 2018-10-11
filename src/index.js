@@ -54,10 +54,15 @@ class Game extends React.Component {
     if ( current.squares[index] || calculateWinner( current.squares ) ) { return; }
     const squares = current.squares.slice();
     squares[index] = this.state.xIsNext ? 'X' : 'O';
-    this.setState( { 
-      history: history.concat( [{ squares: squares, moves: [ this.getMoveRow( index ), this.getMoveColumn( index ) ] }] ),
-      stepNumber: this.state.stepNumber + 1,
-      xIsNext: !this.state.xIsNext 
+    this.setState( ( prevState, props ) => {
+      return {
+        history: history.concat( [{ 
+          squares: squares,
+          moves: [ this.getMoveRow( index ), this.getMoveColumn( index ) ]
+        }] ),
+        stepNumber: prevState.stepNumber + 1,
+        xIsNext: !prevState.xIsNext
+      }
     } );
   }
 
@@ -132,7 +137,7 @@ class Game extends React.Component {
         <div className="game-info">
           <div>{ status }</div>
           <ol>{ moves }</ol>
-          <button onClick={ () => this.setState( { isAsc: ! this.state.isAsc } ) }>Change order</button>
+          <button onClick={ () => this.setState( ( prevState, props ) => ({ isAsc: !prevState.isAsc }) ) }>Change order</button>
         </div>
       </div>
     );
